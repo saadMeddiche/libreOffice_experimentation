@@ -14,4 +14,6 @@ public interface Constants {
 
     Path INJECTED_TEMPLATES_DESTINATION = TEMPLATES_SOURCE.resolve(Path.of("results"));
 
+    Path ASSETS_SOURCE = TEMPLATES_SOURCE.resolve("assets");
+
 }
