@@ -17,8 +17,9 @@ public class BirthDateTemplate implements Template {
     @Override
     public List<TextBox> getTextBoxes() {
         return List.of(
-                new TextBox("birthdate", LocalDate.of(2000,1,1).toString()),
-                new TextBox("birthtime", LocalTime.of(9,30, 0).toString())
+                new TextBox("fullName", "Meddiche Saâd"),
+                new TextBox("birthdate", LocalDate.of(2000, 1, 1).toString()),
+                new TextBox("birthtime", LocalTime.of(9, 30, 0).toString())
         );
     }
 
