@@ -35,6 +35,11 @@ public class TemplateInjector implements SubProcess {
         for(var template : templates) {
 
             Path templatePath = Constants.TEMPLATES_SOURCE.resolve(NamingUtil.templateName(template));
+            Path resultPath = Constants.INJECTED_TEMPLATES_DESTINATION.resolve(NamingUtil.injectedTemplateName(template));
+
+            if(!Files.exists(templatePath)) {
+                log.error(AnsiOutput.toString(AnsiColor.YELLOW, " - WARN: template {} not found"), template.getName());
+            }
 
             try(PDDocument document = Loader.loadPDF(templatePath.toFile())) {
 
@@ -50,8 +55,6 @@ public class TemplateInjector implements SubProcess {
                 this.injectImages(template, acroForm, document);
 
                 acroForm.flatten();
-
-                Path resultPath = Constants.INJECTED_TEMPLATES_DESTINATION.resolve(NamingUtil.injectedTemplateName(template));
 
                 document.save(resultPath.toFile());
 
@@ -95,11 +98,12 @@ public class TemplateInjector implements SubProcess {
             }
 
             if (!Files.exists(imageField.imagePath())) {
-                log.error(AnsiOutput.toString(AnsiColor.YELLOW, " - WARN: image file does not exist at: {}"), imageField.imagePath());
+                log.error(AnsiOutput.toString(AnsiColor.YELLOW, " - WARN: template [{}] image file does not exist at: {}"), template.getName(), imageField.imagePath());
                 continue;
             }
 
             if (field.getWidgets().isEmpty()) {
+                log.error(AnsiOutput.toString(AnsiColor.YELLOW, " - WARN: template [{}] image field [{}] has no widget"), template.getName(), imageField.fieldName());
                 continue;
             }
 
@@ -118,8 +122,6 @@ public class TemplateInjector implements SubProcess {
                     contentStream.drawImage(pdImage, rect.getLowerLeftX(), rect.getLowerLeftY(), rect.getWidth(), rect.getHeight());
 
                 }
-
-                field.setValue("");
 
             }
 
